@@ -1,0 +1,60 @@
+@import "src/assets/scss/helper/_variables.scss";
+header.header-analysis {
+  background-color: white;
+  border-bottom: 1px solid $border-gray;
+  .header-content {
+    padding-right: 15px;
+    .logo {
+      width: 320px;
+    }
+    .head-component {
+      justify-content: space-between;
+      .header-title {
+        color: $dark;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+      .header-item {
+        color: $dark;
+        &:hover {
+          background: $rowHover;
+        }
+        &.notification, &.account {
+          svg {
+            fill: $dark
+          }
+        }
+        &.popup {
+          position: relative;
+          ul {
+            width: 175px;
+          }
+        }
+      }
+    }
+  }
+}
+
+header {
+  .header-content {
+    padding-left: 10px;
+    .btn-expand {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      &:hover {
+        color: $blue;
+      }
+    }
+    .logo {
+      margin-left: 20px;
+      width:1500px;
+      text-align: center;
+    }
+    .dropdown-user {
+      background: transparent;
+    font-size: 12px;
+    }
+  }
+}

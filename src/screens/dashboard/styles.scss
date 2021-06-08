@@ -1,0 +1,64 @@
+
+.img {
+    width: 300px;
+    height: 300px;
+    margin-top: 50px;
+}
+.person-description {
+    margin-top:20px;
+}
+.person-name-age {
+    font-weight: 400;
+    font-size: 18px;
+}
+.person-info{
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.buttom {
+    margin-top:30px;
+}
+.button-icon {
+   
+    border: none;
+    margin-left: 20px;
+}
+.main {
+    text-align: center;
+    align-items: center;
+    width: 550px;
+    border: 2px solid gray;
+    border-radius: 15px;
+    margin-left: 100px;
+    margin-top:50px
+}
+.new {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.input-new {
+    border-radius: 10px;
+}
+.decription {
+    text-align: initial;
+    font-size: 15px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+.btn-add {
+    width: 400px;
+    margin-bottom: 50px;
+    /* color: green; */
+    background-color: green;
+    color: white;
+    border-radius: 15px;
+}
+.each-item {
+    border: 2px solid gray;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+}
