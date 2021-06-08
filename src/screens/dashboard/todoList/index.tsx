@@ -4,27 +4,37 @@ import _ from "lodash";
 import AddItemComponent from "../addItem/index";
 interface IState {
   listToDoEdit: any[];
+  defaultListToDo: any[];
 }
 function ToDoListComponent(props) {
   const [state, setState] = useState<IState>({
     listToDoEdit: [],
+    defaultListToDo: [],
   });
   useEffect(() => {
     setState((state) => ({
       ...state,
       listToDoEdit: props.listToDo,
+      defaultListToDo: props.listToDo,
     }));
   }, []);
-  const { listToDoEdit } = state;
-  const onShowDetails = (index, type) => () => {
+  const { listToDoEdit, defaultListToDo } = _.cloneDeep(state);
+  const onShowDetails = (id, type) => () => {
+    const indexDef = defaultListToDo.findIndex((x) => x.id === id);
+    const index = listToDoEdit.findIndex((x) => x.id === id);
+    const list = _.cloneDeep(listToDoEdit);
+    const listDef = _.cloneDeep(defaultListToDo);
     if (type === "checkbox") {
-      listToDoEdit[index].isChecked = !listToDoEdit[index].isChecked;
+      list[index].isChecked = !listToDoEdit[index].isChecked;
+      listDef[indexDef].isChecked = !defaultListToDo[indexDef].isChecked;
     } else {
-      listToDoEdit[index].showDetails = !listToDoEdit[index].showDetails;
+      list[index].showDetails = !listToDoEdit[index].showDetails;
+      listDef[indexDef].showDetails = !defaultListToDo[indexDef].showDetails;
     }
     setState((state) => ({
       ...state,
-      listToDoEdit,
+      listToDoEdit: list,
+      defaultListToDo: listDef,
     }));
   };
   const transferDataToListToDo = useCallback(
@@ -45,11 +55,14 @@ function ToDoListComponent(props) {
   );
 
   const removeItem = (index) => () => {
-    const list = _.cloneDeep(listToDoEdit).filter((x, pindex) => x && index !== pindex);
+    const id = listToDoEdit[index].id;
+    const list = _.cloneDeep(defaultListToDo).filter((x) => x.id !== id);
+    const arrEdit = _.cloneDeep(listToDoEdit).filter((x) => x.id !== id);
     props.updateList(list);
     setState((state) => ({
       ...state,
-      listToDoEdit: list,
+      listToDoEdit: arrEdit,
+      defaultListToDo: list,
     }));
   };
 
@@ -70,13 +83,13 @@ function ToDoListComponent(props) {
           >
             <Checkbox
               checked={item.isChecked}
-              onChange={onShowDetails(index, "checkbox")}
+              onChange={onShowDetails(item.id, "checkbox")}
               style={{ marginRight: "195px" }}
             >
               {item.title}
             </Checkbox>
             <Button
-              onClick={onShowDetails(index, "detail")}
+              onClick={onShowDetails(item.id, "detail")}
               type="primary"
               style={{ marginRight: "15px", height: "40px", borderRadius: "10px" }}
             >
@@ -98,19 +111,35 @@ function ToDoListComponent(props) {
     });
   };
   const removeAllCheckec = () => {
+    const listDef = _.cloneDeep(defaultListToDo).filter((x) => !x.isChecked);
     const list = _.cloneDeep(listToDoEdit).filter((x) => !x.isChecked);
     props.updateList(list);
     setState((state) => ({
       ...state,
       listToDoEdit: list,
+      defaultListToDo: listDef,
     }));
+  };
+  const debounced = _.debounce((input) => {
+    const list = state.defaultListToDo.filter((i) => {
+      i.indexOfInputSearch = i.title.toUpperCase().indexOf(input);
+      return i.indexOfInputSearch > -1;
+    });
+    setState((state) => ({
+      ...state,
+      listToDoEdit: list,
+    }));
+  }, 500);
+  const searchMessage = (e) => {
+    const input = e.target.value.trim().toUpperCase();
+    debounced(input);
   };
   const checked = listToDoEdit.find((item) => item.isChecked);
   return (
     <div>
       <h2 className="new">New Task</h2>
       <div style={{ marginLeft: "10px", marginBottom: "10px", marginTop: "10px" }}>
-        <Input className="input-new" placeholder="Add new task" />
+        <Input onChange={searchMessage} className="input-new" placeholder="Search" />
       </div>
       <div>{renderListToDo()}</div>
       {checked ? (

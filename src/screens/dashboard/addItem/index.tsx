@@ -10,6 +10,7 @@ interface IState {
   date: any;
   description: string;
   priority: string;
+  id: number;
 }
 function AddItemComponent(props) {
   const [state, setState] = useState<IState>({
@@ -17,6 +18,7 @@ function AddItemComponent(props) {
     date: moment(new Date()),
     description: "",
     priority: "Normal",
+    id: Math.random(),
   });
   useEffect(() => {
     if (props.data) {
